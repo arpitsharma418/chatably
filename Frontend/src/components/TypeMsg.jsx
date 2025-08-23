@@ -9,7 +9,6 @@ export default function TypeMsg() {
   const {selectedConvo} = useChat();
   const loggedInUser = JSON.parse(localStorage.getItem("userInfo"));
   const {sendMessage} = useSocket();
-  const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
   const receiver = selectedConvo && selectedConvo.members.find((member) => member._id !== loggedInUser.id);
 
@@ -26,7 +25,7 @@ export default function TypeMsg() {
     sendMessage({receiverId, text});
     await axios
       .post(
-        `${API_BASE}/api/message`,
+        `https://chatably.onrender.com/api/message`,
         {
           text,
           receiverId,

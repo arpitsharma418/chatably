@@ -11,11 +11,10 @@ export const SocketProvider = ({ children }) => {
   const {allmessages,setAllMessages} = useChat();
   const { authUser } = useAuth();
   const [onlineUsers, setOnlineUsers] = useState([]);
-  const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
   useEffect(() => {
     if (authUser) {
-      const newSocket = io(`${API_BASE}`, {
+      const newSocket = io(`https://chatably.onrender.com`, {
         withCredentials: true,
         auth: { userId: authUser.id },
       });

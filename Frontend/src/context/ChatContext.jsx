@@ -7,13 +7,12 @@ export const ChatProvider = ({ children }) => {
   const [allmessages, setAllMessages] = useState([]);
   const [selectedConvo, setSelectedConvo] = useState(null);
   const [loading, setLoading] = useState(true);
-  const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
   const selectConversation = async (convo) => {
     setSelectedConvo(convo);
     setLoading(true);
     const response = await axios.get(
-      `${API_BASE}/api/message/${convo._id}`,
+      `https://chatably.onrender.com/api/message/${convo._id}`,
       { withCredentials: true }
     );
     setLoading(false);

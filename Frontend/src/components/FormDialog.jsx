@@ -12,7 +12,6 @@ import Cookies from "js-cookie";
 
 export default function FormDialog() {
   const [open, setOpen] = React.useState(false);
-  const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -28,7 +27,7 @@ export default function FormDialog() {
     const formData = new FormData(event.currentTarget);
     const formJson = Object.fromEntries(formData.entries());
     const email = formJson.email;
-    await axios.post(`${API_BASE}/api/conversation`,{email},{
+    await axios.post(`https://chatably.onrender.com/api/conversation`,{email},{
       withCredentials: true,
       headers:{
         Authorization: `Bearer ${token}`

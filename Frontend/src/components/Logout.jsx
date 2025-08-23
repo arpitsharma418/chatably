@@ -6,11 +6,10 @@ import LogoutIcon from '@mui/icons-material/Logout';
 
 export default function Logout() {
     const navigate = useNavigate();
-    const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
   const handleLogout = async () => {
     const token = Cookies.get("token");
-    axios.get(`${API_BASE}/api/logout`, {
+    axios.get(`https://chatably.onrender.com/api/logout`, {
       withCredentials: true,
       headers: {
         Authorization: `Bearer ${token}`
