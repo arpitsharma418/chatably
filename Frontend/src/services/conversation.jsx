@@ -1,8 +1,7 @@
 import axios from "axios";
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
 const getMyConversations = async() => {
-    const res = await axios.get(`${API_BASE}/api/conversation`, {
+    const res = await axios.get(`https://chatably.onrender.com/api/conversation`, {
         withCredentials: true,
     });
 
