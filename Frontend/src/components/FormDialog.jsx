@@ -49,7 +49,6 @@ export default function FormDialog() {
         <DialogContent>
           <DialogContentText>
             Enter the email ID you want to connect with.
-            <div>After connecting, Please refresh the page.</div>
           </DialogContentText>
           <form onSubmit={handleSubmit} id="subscription-form">
             <TextField
