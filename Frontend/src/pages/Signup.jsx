@@ -4,8 +4,6 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080";
-
 const validate = (values) => {
   const errors = {};
   if (!values.fullName) {
@@ -41,7 +39,7 @@ export default function signup() {
       };
 
       axios
-        .post(`${API_BASE}/api/signup`, userData)
+        .post(`https://chatably.onrender.com/api/signup`, userData)
         .then((response) => {
           console.log("Ok");
           navigate("/login");
