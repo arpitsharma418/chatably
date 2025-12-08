@@ -3,11 +3,13 @@ import { useFormik } from "formik";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc";
+import Divider from '@mui/material/Divider';
 
 const validate = (values) => {
   const errors = {};
   if (!values.fullName) {
-    errors.fullName = "Fullname is required";
+    errors.fullName = "fullname is required";
   }
 
   if (!values.email) {
@@ -31,7 +33,6 @@ export default function signup() {
     },
     validate,
     onSubmit: (values) => {
-
       const userData = {
         fullName: values.fullName,
         email: values.email,
@@ -52,22 +53,30 @@ export default function signup() {
 
   return (
     <>
-      <div className="border w-[100%] h-dvh flex items-center justify-center">
-        <div className="w-[80%] sm:w-[30rem] p-8 py-10 bg-white rounded-xl">
-          <div className="flex flex-col items-center text-xl sm:text-3xl mb-6 font-bold wrap">
-            <LockOutlineIcon />
-            <h1>Sign up</h1>
-            <h1>Welcome to Chatably</h1>
+      <div className="text-sm w-[100%] h-dvh flex items-center justify-center">
+        <div className="w-[80%] sm:w-[30rem] p-8 py-10">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-green-500 mb-2">
+              Create an account
+            </h1>
+            <p className="mb-5 md:text-sm">Please enter your details to Sign up</p>
+          </div>
+
+          <div className="cursor-pointer mb-5 flex items-center justify-center space-x-2 rounded-lg border-1 border-black/10 p-2">
+            <FcGoogle className="text-lg" /> <span>Sign up with Google</span>
+          </div>
+
+          <div className="mb-5">
+             <Divider>Or sign up with email</Divider>
           </div>
 
           <form onSubmit={formik.handleSubmit}>
             <div className="flex flex-col">
-              <label htmlFor="fullName">Full name</label>
               <input
                 type="text"
                 id="fullName"
                 placeholder="Enter your name"
-                className="p-3 my-2 rounded-lg border-1 border-gray-300 focus:outline-3 outline-black text-sm"
+                className="p-2 outline-0 border-1 border-black/10 rounded-lg mt-3"
                 onChange={formik.handleChange}
                 value={formik.values.fullName}
               />
@@ -77,12 +86,11 @@ export default function signup() {
                 </div>
               ) : null}
 
-              <label htmlFor="email">Email</label>
               <input
                 type="email"
                 id="email"
                 placeholder="Enter your email"
-                className="p-3 my-2 rounded-lg border-1 border-gray-300 focus:outline-3 outline-black text-sm"
+                className="p-2 outline-0 border-1 border-black/10 rounded-lg mt-3"
                 onChange={formik.handleChange}
                 value={formik.values.email}
               />
@@ -92,12 +100,11 @@ export default function signup() {
                 </div>
               ) : null}
 
-              <label htmlFor="password">Password</label>
               <input
                 type="password"
                 id="password"
                 placeholder="Enter your password"
-                className="p-3 my-2 rounded-lg border-1 border-gray-300 focus:outline-3 outline-black text-sm"
+                className="p-2 outline-0 border-1 border-black/10 rounded-lg mt-3"
                 onChange={formik.handleChange}
                 value={formik.values.password}
               />
@@ -109,21 +116,21 @@ export default function signup() {
 
               <button
                 type="submit"
-                className="p-2 mt-4 rounded-lg text-white bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 hover:from-purple-600 hover:via-pink-600 hover:to-red-600 transition duration-300 ease-in-out"
+                className="p-2 mt-8 rounded-lg bg-green-500 text-white hover:bg-green-600"
               >
-                SIGN UP
+                Sign up
               </button>
             </div>
           </form>
 
-          <div className="mt-4 text-center text-sm sm:text-base">
+          <div className="mt-4 text-center text-sm">
             <p>
               Already have an account?{" "}
               {/* <a href="#">
                 <span className="text-blue-600">Login Now</span>
               </a> */}
               <Link to="/login">
-                <span className="text-blue-600">Login</span>
+                <span className="text-green-500">Login</span>
               </Link>
             </p>
           </div>

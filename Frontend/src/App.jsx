@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Routes, Route} from "react-router-dom";
 import Signup from "./pages/Signup.jsx";
 import Login from "./pages/Login.jsx";
+import Register from "./pages/Register.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
 
 export default function App() {
@@ -29,6 +30,8 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/Signup" element={<Signup />} />
       </Routes>
+
+      {/* <Register/> */}
     </>
   );
 }
