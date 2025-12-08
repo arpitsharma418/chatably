@@ -54,7 +54,7 @@ export default function signup() {
   return (
     <>
       <div className="text-sm w-[100%] h-dvh flex items-center justify-center">
-        <div className="w-[80%] sm:w-[30rem] p-8 py-10">
+        <div className="w-[100%] sm:w-[30rem] p-8 py-10">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-green-500 mb-2">
               Create an account
