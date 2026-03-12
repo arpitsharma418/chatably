@@ -5,11 +5,17 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 
+const isProduction = process.env.NODE_ENV === "production";
+const cookieSameSite = process.env.COOKIE_SAME_SITE || (isProduction ? "none" : "lax");
+const cookieSecure = process.env.COOKIE_SECURE
+  ? process.env.COOKIE_SECURE === "true"
+  : isProduction;
+
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
+  secure: cookieSecure,
   maxAge: 7 * 24 * 60 * 60 * 1000,
-  sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+  sameSite: cookieSameSite,
 };
 
 const normalizeEmail = (email = "") => String(email).trim().toLowerCase();

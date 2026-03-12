@@ -18,6 +18,7 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
 const CORS_ORIGINS = CLIENT_URL.split(",").map((origin) => origin.trim()).filter(Boolean);
+const SERVE_FRONTEND = process.env.SERVE_FRONTEND === "true";
 
 const _dirname = path.resolve();
 
@@ -39,7 +40,13 @@ app.use(cookieParser());
 app.disable("x-powered-by");
 app.use(
     cors({
-        origin: CORS_ORIGINS,
+        origin(origin, callback) {
+            if (!origin || CORS_ORIGINS.includes(origin)) {
+                return callback(null, true);
+            }
+
+            return callback(new Error("CORS origin not allowed"));
+        },
         credentials: true,
     })
 );
@@ -53,7 +60,7 @@ app.get("/health", (req, res) => {
     res.status(200).json({ status: "ok" });
 });
 
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === "production" && SERVE_FRONTEND) {
     app.use(express.static(path.join(_dirname, "/Frontend/dist")));
     app.get("*", (req, res) => {
         res.sendFile(path.resolve(_dirname, "Frontend", "dist", "index.html"));
