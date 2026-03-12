@@ -15,6 +15,10 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    isGuest: {
+        type: Boolean,
+        default: false,
+    },
 }, {timestamps: true});
 
 const User = mongoose.model("User", userSchema);

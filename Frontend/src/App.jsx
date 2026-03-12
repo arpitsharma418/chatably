@@ -1,10 +1,9 @@
-import Contacts from "./components/Contacts";
-import ChatSection from "./components/ChatSection";
 import { useState } from "react";
 import { Routes, Route} from "react-router-dom";
 import Signup from "./pages/Signup.jsx";
 import Login from "./pages/Login.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
+import ChatBox from "./components/ChatBox.jsx";
 
 export default function App() {
   const { authUser } = useAuth();
@@ -17,17 +16,18 @@ export default function App() {
           path="/"
           element={
             authUser ? (
-              <div className="flex flex-col bg-white sm:flex-row h-screen">
-                <Contacts open={showContacts} onClose={() => setShowContacts(false)} />
-                <ChatSection onOpenContacts={() => setShowContacts(true)} />
-              </div>
+              <ChatBox
+                showContacts={showContacts}
+                onCloseContacts={() => setShowContacts(false)}
+                onOpenContacts={() => setShowContacts(true)}
+              />
             ) : (
               <Login />
             )
           }
         />
         <Route path="/login" element={<Login />} />
-        <Route path="/Signup" element={<Signup />} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
 
     </>

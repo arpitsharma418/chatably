@@ -1,8 +1,73 @@
 @import "tailwindcss";
 
-body {
-  font-family: "TASA Orbiter", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
+@layer base {
+  :root {
+    --ink-900: #0f172a;
+    --ink-700: #334155;
+    --surface: #ffffff;
+    --surface-muted: #f1f5f9;
+    --brand: #2563eb;
+    --brand-dark: #1d4ed8;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: "TASA Orbiter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    color: var(--ink-900);
+    background:
+      radial-gradient(1100px 480px at 95% -10%, #bfdbfe 0%, transparent 90%),
+      radial-gradient(900px 500px at -10% 10%, #dbeafe 0%, transparent 52%),
+      var(--surface-muted);
+    min-height: 100vh;
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply rounded-2xl border border-blue-100 bg-white/85 shadow-xl shadow-blue-100/60 backdrop-blur;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700;
+  }
+
+  .typing-dots {
+    @apply inline-flex items-center gap-1;
+  }
+
+  .typing-dots i {
+    @apply h-1.5 w-1.5 rounded-full bg-blue-500;
+    animation: typing-bounce 1s infinite ease-in-out;
+  }
+
+  .typing-dots i:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+
+  .typing-dots i:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+}
+
+@keyframes typing-bounce {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.45;
+  }
+  30% {
+    transform: translateY(-2px);
+    opacity: 1;
+  }
 }

@@ -1,131 +1,163 @@
-import LockOutlineIcon from "@mui/icons-material/LockOutline";
-import { useFormik } from "formik";
-import axios from "axios";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../lib/api";
 import { useAuth } from "../context/AuthContext";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { FcGoogle } from "react-icons/fc";
-import Divider from '@mui/material/Divider';
 
-const validate = (values) => {
-  const errors = {};
-
-  if (!values.email) {
-    errors.email = "email is required";
-  }
-
-  if (!values.password) {
-    errors.password = "password is required";
-  }
-
-  return errors;
-};
-
-export default function signup() {
+export default function Login() {
   const navigate = useNavigate();
-  const { authUser, setAuthUser } = useAuth();
+  const { setAuthUser } = useAuth();
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [errors, setErrors] = useState({});
+  const [formError, setFormError] = useState("");
+  const [guestLoading, setGuestLoading] = useState(false);
+  const [signInLoading, setSignInLoading] = useState(false);
 
-  const formik = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-    },
-    validate,
-    onSubmit: (values) => {
-      const userData = {
-        email: values.email,
-        password: values.password,
-      };
+  const validate = (values) => {
+    const next = {};
+    if (!values.email.trim()) {
+      next.email = "Email is required.";
+    }
+    if (!values.password.trim()) {
+      next.password = "Password is required.";
+    }
+    return next;
+  };
 
-      axios
-        .post(`https://chatably.onrender.com/api/login`, userData, {
-          withCredentials: true,
-        })
-        .then((res) => {
-          localStorage.setItem("userInfo", JSON.stringify(res.data));
+  const handleChange = (event) => {
+    setForm((prev) => ({ ...prev, [event.target.id]: event.target.value }));
+  };
 
-          setAuthUser(res.data);
-          navigate("/");
-        })
-        .catch((error) => {
-          console.log(error.response.data);
-        });
-    },
-  });
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const nextErrors = validate(form);
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) {
+      return;
+    }
+
+    setFormError("");
+    setSignInLoading(true);
+    try {
+      const res = await api.post("/api/login", form);
+      setAuthUser(res.data);
+      navigate("/");
+    } catch (error) {
+      console.log(error.response?.data || error);
+      setFormError("Login failed. Check your credentials.");
+    } finally {
+      setSignInLoading(false);
+    }
+  };
+
+  const handleGuest = async () => {
+    setFormError("");
+    setGuestLoading(true);
+    try {
+      const res = await api.post("/api/guest");
+      setAuthUser(res.data);
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+      setFormError("Guest login failed. Try again.");
+    } finally {
+      setGuestLoading(false);
+    }
+  };
 
   return (
-    <>
-      <div className="text-sm w-[100%] h-dvh flex items-center justify-center">
-        <div className="w-[100%] sm:w-[30rem] p-8 py-16 bg-white rounded-xl">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-green-500 mb-2">
-              Welcome Back
-            </h1>
-            <p className="mb-5 md:text-sm">
-              Please enter your details to login
-            </p>
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="glass-card w-full max-w-md p-8 sm:p-10">
+        <div className="text-center">
+          <span className="px-3 py-1 text-xs font-medium rounded-full border-1 border-orange-300 bg-orange-50 text-orange-500">
+            Welcome Back
+          </span>
+          <h1 className="mt-4 text-2xl font-bold text-slate-900">
+            Sign in to Chatably
+          </h1>
+          <p className="mt-2 text-sm text-slate-500">
+            Please enter your details to continue.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          disabled={guestLoading}
+          onClick={handleGuest}
+          className="border-1 border-black/10 hover:bg-gray-100 opacity-70 py-2 text-sm font-medium w-full mt-4 rounded-xl transition-all cursor-pointer"
+        >
+          {guestLoading ? "Signing in..." : "Continue as guest"}
+        </button>
+
+        <div className="my-6 flex items-center gap-3">
+          <div className="h-px flex-1 bg-black/10" />
+          <span className="text-xs uppercase tracking-wider text-slate-400">
+            Sign in with email
+          </span>
+          <div className="h-px flex-1 bg-black/10" />
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="email" className="text-xs font-semibold text-slate-600">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              placeholder="you@example.com"
+              className="w-full py-2 px-3 text-sm rounded-xl mt-2 outline-0 border-1 border-black/10"
+              onChange={handleChange}
+              value={form.email}
+            />
+            {errors.email ? (
+              <div className="mt-1 text-xs text-red-600">
+                {errors.email}
+              </div>
+            ) : null}
           </div>
 
-          <div className="cursor-pointer mb-5 flex items-center justify-center space-x-2 rounded-lg border-1 border-black/10 p-2">
-            <FcGoogle className="text-lg" /> <span>Login with Google</span>
+          <div>
+            <label htmlFor="password" className="text-xs font-semibold text-slate-600">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              placeholder="Enter your password"
+              className="w-full py-2 px-3 text-sm rounded-xl mt-2 outline-0 border-1 border-black/10"
+              onChange={handleChange}
+              value={form.password}
+            />
+            {errors.password ? (
+              <div className="mt-1 text-xs text-red-600">
+                {errors.password}
+              </div>
+            ) : null}
           </div>
 
-          <div className="mb-5">
-            <Divider>Or login with email</Divider>
-          </div>
-
-          <form onSubmit={formik.handleSubmit}>
-            <div className="flex flex-col">
-              <input
-                type="email"
-                id="email"
-                placeholder="Enter your email"
-                className="p-2 outline-0 border-1 border-black/10 rounded-lg mt-3"
-                onChange={formik.handleChange}
-                value={formik.values.email}
-              />
-              {formik.errors.email ? (
-                <div className="text-sm text-red-600">
-                  {formik.errors.email}
-                </div>
-              ) : null}
-
-              <input
-                type="password"
-                id="password"
-                placeholder="Enter your password"
-                className="p-2 outline-0 border-1 border-black/10 rounded-lg mt-3"
-                onChange={formik.handleChange}
-                value={formik.values.password}
-              />
-              {formik.errors.password ? (
-                <div className="text-sm text-red-600">
-                  {formik.errors.password}
-                </div>
-              ) : null}
-
-              <button
-                type="submit"
-                className="p-2 mt-8 rounded-lg bg-green-500 text-white hover:bg-green-600"
-              >
-                Login
-              </button>
+          {formError ? (
+            <div className="rounded-xl bg-rose-50 px-3 py-2 text-xs text-red-600">
+              {formError}
             </div>
-          </form>
+          ) : null}
 
-          <div className="mt-4 text-center text-sm">
-            <p>
-              Dont have an account?{" "}
-              {/* <a href="#">
-                <span className="text-blue-600">Signup Now</span>
-              </a> */}
-              <Link to="/signup">
-                <span className="text-green-500">Sign Up</span>
-              </Link>
-            </p>
-          </div>
+          <button
+            type="submit"
+            className="w-full rounded-xl bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600 transition-all cursor-pointer"
+          >
+            {signInLoading ? "Signing in..." : "Sign in"}
+          </button>
+        </form>
+
+        <div className="mt-5 text-center text-sm">
+          <p>
+            Don't have an account?{" "}
+            <Link to="/signup">
+              <span className="font-semibold text-orange-500">Sign up</span>
+            </Link>
+          </p>
         </div>
       </div>
-    </>
+    </div>
   );
 }

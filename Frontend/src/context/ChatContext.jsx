@@ -1,37 +1,44 @@
-import { createContext, useContext, useState } from "react";
-import axios, { all } from "axios";
+import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import api from "../lib/api";
 
 const ChatContext = createContext();
 
 export const ChatProvider = ({ children }) => {
   const [allmessages, setAllMessages] = useState([]);
   const [selectedConvo, setSelectedConvo] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  const selectConversation = async (convo) => {
+  const selectConversation = useCallback(async (convo) => {
+    if (!convo?._id) {
+      return;
+    }
+
     setSelectedConvo(convo);
+    setAllMessages([]);
     setLoading(true);
-    const response = await axios.get(
-      `https://chatably.onrender.com/api/message/${convo._id}`,
-      { withCredentials: true }
-    );
-    setLoading(false);
-    setAllMessages(response.data.messages);
-  };
 
-  const values = {
-    allmessages, 
-    setAllMessages, 
+    try {
+      const response = await api.get(`/api/message/${convo._id}`);
+      setAllMessages(response.data.messages || []);
+    } catch (error) {
+      console.log("Failed to load messages", error);
+      setAllMessages([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const values = useMemo(() => ({
+    allmessages,
+    setAllMessages,
     selectConversation,
     selectedConvo,
-    loading
-  }
+    loading,
+  }), [allmessages, loading, selectConversation, selectedConvo]);
 
   return (
     <>
-      <ChatContext.Provider value={values}>
-        {children}
-      </ChatContext.Provider>
+      <ChatContext.Provider value={values}>{children}</ChatContext.Provider>
     </>
   );
 };

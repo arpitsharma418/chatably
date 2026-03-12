@@ -3,8 +3,8 @@ import Conversation from '../models/conversation.js';
 
 const connectWithUserByEmail = async (req, res) => {
   try {
-    const { email } = req.body;
-    if(!email){
+    const email = String(req.body?.email || "").trim().toLowerCase();
+    if (!email) {
       return res.status(400).json("Email is not there");
     }
     const currentUserId = req.user._id; 
