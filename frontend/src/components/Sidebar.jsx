@@ -9,8 +9,6 @@ import toast from "react-hot-toast";
 import {
   Settings,
   Logout,
-  MessageBox,
-  Search,
   Close,
   Groups,
 } from "../Icons/Icons.jsx";
@@ -96,9 +94,6 @@ export default function Sidebar({ onChatSelect }) {
       <div className="p-4 border-b border-gray-100">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-orange-600 rounded-xl flex items-center justify-center">
-              <MessageBox />
-            </div>
             <span className="font-bold text-lg text-gray-900">Chatably</span>
           </div>
           <div className="flex items-center gap-1">
@@ -211,7 +206,7 @@ export default function Sidebar({ onChatSelect }) {
               <p className="text-xs font-medium text-gray-400">Your Groups</p>
               <button
                 onClick={() => setShowGroupModal(true)}
-                className="text-xs text-orange-600 font-medium hover:underline"
+                className="text-xs text-green-600 font-medium hover:underline"
               >
                 Create New
               </button>
@@ -227,7 +222,7 @@ export default function Sidebar({ onChatSelect }) {
                 <p className="text-sm text-gray-400">No groups yet</p>
                 <button
                   onClick={() => setShowGroupModal(true)}
-                  className="text-xs text-orange-600 font-medium hover:underline"
+                  className="text-xs text-green-600 font-medium hover:underline"
                 >
                   Create one
                 </button>

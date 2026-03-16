@@ -24,14 +24,18 @@ export const getDMMessages = async (req, res) => {
 
 export const sendDMMessage = async (req, res) => {
   try {
-    const { content, type = "text" } = req.body;
+    const { content } = req.body;
     const { userId } = req.params;
+
+    if (!content?.trim()) {
+      return res.status(400).json({ message: "Message content is required" });
+    }
 
     const message = await Message.create({
       sender: req.user._id,
       receiver: userId,
-      content,
-      type,
+      content: content.trim(),
+      type: "text",
     });
 
     await message.populate("sender", "name avatar");
@@ -60,14 +64,18 @@ export const getGroupMessages = async (req, res) => {
 
 export const sendGroupMessage = async (req, res) => {
   try {
-    const { content, type = "text" } = req.body;
+    const { content } = req.body;
     const { groupId } = req.params;
+
+    if (!content?.trim()) {
+      return res.status(400).json({ message: "Message content is required" });
+    }
 
     const message = await Message.create({
       sender: req.user._id,
       group: groupId,
-      content,
-      type,
+      content: content.trim(),
+      type: "text",
     });
 
     await message.populate("sender", "name avatar");

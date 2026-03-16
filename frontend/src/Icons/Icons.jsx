@@ -48,6 +48,22 @@ function MessageBox() {
   );
 }
 
+function Send({ h = "20px", w = "20px", fill = "currentColor" }) {
+  return (
+    <div>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height={h}
+        viewBox="0 -960 960 960"
+        width={w}
+        fill={fill}
+      >
+        <path d="M120-160v-640l760 320-760 320Zm80-120 474-200-474-200v140l200 60-200 60v140Zm0 0v-400 400Z" />
+      </svg>
+    </div>
+  );
+}
+
 function Search() {
   return (
     <div>
@@ -112,4 +128,4 @@ function Groups({ h = "24px", w = "24px" }) {
   );
 }
 
-export { Settings, Logout, MessageBox, Search, Close, Groups, LeftArrow };
+export { Settings, Logout, MessageBox, Search, Close, Groups, LeftArrow, Send };

@@ -3,9 +3,8 @@ import { useAuthStore } from "../store/authStore";
 import { useChatStore } from "../store/chatStore";
 import { getSocket } from "../lib/socket";
 import Avatar from "./Avatar";
-import { Send, Users} from "lucide-react";
 import toast from "react-hot-toast";
-import { LeftArrow, Groups } from "../Icons/Icons.jsx";
+import { LeftArrow, Groups, Send } from "../Icons/Icons.jsx";
 
 function formatTime(dateStr) {
   return new Date(dateStr).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
@@ -98,9 +97,6 @@ export default function ChatWindow({ chat, onBack }) {
 
   if (!chat) return (
     <div className="flex-1 flex flex-col items-center justify-center bg-gray-50 text-center p-8">
-      <div className="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mb-4">
-        <Send size={32} className="text-orange-500" />
-      </div>
       <h2 className="text-xl font-bold text-gray-700 mb-2">Welcome to Chatably</h2>
       <p className="text-gray-400 text-sm max-w-xs">Search for a person to start chatting, or pick a group from the sidebar.</p>
     </div>
@@ -156,7 +152,7 @@ export default function ChatWindow({ chat, onBack }) {
                       {!isMe && showAvatar && chat.type === "group" && (
                         <p className="text-xs font-medium text-gray-500 mb-0.5 ml-1">{msg.sender.name}</p>
                       )}
-                      <div className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${isMe ? "bg-orange-600 text-white rounded-br-sm" : "bg-gray-100 text-gray-800 rounded-bl-sm"}`}>
+                      <div className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${isMe ? "bg-green-600 text-white rounded-br-sm" : "bg-gray-100 text-gray-800 rounded-bl-sm"}`}>
                         {msg.content}
                       </div>
                       <span className="text-[10px] text-gray-400 mt-1 mx-1">{formatTime(msg.createdAt)}</span>
@@ -205,10 +201,10 @@ export default function ChatWindow({ chat, onBack }) {
 
       {/* Input bar */}
       <form onSubmit={handleSend} className="px-4 py-3 border-t border-gray-100 bg-white">
-        <div className="flex items-center gap-2 bg-gray-50 rounded-2xl px-4 py-2 border border-gray-200 focus-within:border-orange-400 focus-within:ring-1 focus-within:ring-orange-300 transition">
+        <div className="flex items-center gap-2 bg-gray-50 rounded-2xl px-4 py-2 border border-gray-200 focus-within:border- focus-within:ring-2 focus-within:ring-green-600 transition">
           <input
             type="text"
-            placeholder={`Message ${chat.name}…`}
+            placeholder={`Message ${chat.name}...`}
             className="flex-1 bg-transparent text-sm outline-none text-gray-800 placeholder-gray-400"
             value={input}
             onChange={(e) => handleTyping(e.target.value)}
@@ -217,9 +213,9 @@ export default function ChatWindow({ chat, onBack }) {
           <button
             type="submit"
             disabled={!input.trim() || sending}
-            className="p-2 bg-orange-600 hover:bg-orange-700 disabled:opacity-40 text-white rounded-xl transition flex-shrink-0"
+            className="p-2 bg-green-600 hover:bg-green-700 disabled:opacity-40 text-white rounded-xl transition flex-shrink-0"
           >
-            <Send size={15} />
+            <Send h="15px" w="15px" fill="currentColor" />
           </button>
         </div>
       </form>

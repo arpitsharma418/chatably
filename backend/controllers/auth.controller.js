@@ -48,12 +48,18 @@ export const getMe = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const { name, bio, avatar } = req.body;
+    const { name, bio } = req.body;
     const user = await User.findById(req.user._id);
 
-    if (name) user.name = name;
-    if (bio !== undefined) user.bio = bio;
-    if (avatar) user.avatar = avatar;
+    if (name !== undefined) {
+      const trimmedName = name.trim();
+      if (!trimmedName) {
+        return res.status(400).json({ message: "Name is required" });
+      }
+      user.name = trimmedName;
+    }
+
+    if (bio !== undefined) user.bio = bio.trim();
 
     await user.save();
     res.json(user);
