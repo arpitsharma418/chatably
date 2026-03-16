@@ -9,7 +9,7 @@ import ProfilePage from "./pages/ProfilePage";
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuthStore();
-  if (loading) return <div className="h-screen flex items-center justify-center text-orange-600 text-lg font-semibold">Loading…</div>;
+  if (loading) return <div className="h-screen flex items-center justify-center text-orange-600 text-lg font-semibold">Loading...</div>;
   return user ? children : <Navigate to="/login" />;
 };
 
